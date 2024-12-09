@@ -1,0 +1,129 @@
+/* App.css */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Căn chỉnh các thành phần chung */
+.App {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Thanh navbar */
+.MuiAppBar-root {
+  background-color: #333;
+}
+
+.MuiToolbar-root {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.MuiTypography-root {
+  font-weight: bold;
+}
+
+/* Các nút đăng nhập, đăng ký, quên mật khẩu nằm ở bên trái của AppBar */
+.actions {
+  display: flex;
+  justify-content: flex-start; /* Căn các nút sang trái */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  padding-left: 10px; /* Căn trái với một chút khoảng cách */
+}
+
+.actions button {
+  font-size: 14px; /* Kích thước chữ nhỏ hơn */
+  color: #fff;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 5px 10px; /* Giảm kích thước nút */
+}
+
+/* Hiệu ứng hover cho các nút */
+.actions button:hover {
+  color: #f39c12;
+}
+
+/* Căn chỉnh Snackbar */
+.MuiSnackbar-root {
+  bottom: 30px;
+}
+
+/* Định dạng Alert */
+.MuiAlert-root {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Thêm các style cho form và nút trong form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+form button:hover {
+  background-color: #444;
+}
+
+/* Thêm phần card container cho các form */
+.card-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.MuiButton-root {
+  width: 60%;
+}
+
+/* Thiết lập kích thước banner và logo cho đúng bố cục */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+/* App.css */
+
+/* Căn chỉnh lại phần banner */
+.banner-image {
+  width: 100%;          /* Chiếm toàn bộ chiều rộng màn hình */
+  height: 100vh;        /* Chiếm toàn bộ chiều cao màn hình */
+  object-fit: cover;    /* Giữ tỷ lệ của ảnh và cắt ảnh nếu cần thiết để bao phủ không gian */
+  margin-top: 64px;     /* Đảm bảo banner không bị đẩy lên dưới thanh điều hướng */
+  border-radius: 0;     /* Không bo góc */
+  box-shadow: none;
+  position: relative;   /* Đảm bảo banner không bị trôi khỏi bố cục */
+  top: 0;
+  left: 0;
+}
+
