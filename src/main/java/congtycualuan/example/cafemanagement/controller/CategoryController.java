@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
-@CrossOrigin // Đảm bảo đường dẫn phù hợp với cấu hình bảo mật
 public class CategoryController {
 
     @Autowired
@@ -35,7 +34,7 @@ public class CategoryController {
     }
 
     // API lấy tất cả danh mục
-    @GetMapping("/get")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Category>> getAllCategory() {
         return categoryService.getAllCategory();
     }

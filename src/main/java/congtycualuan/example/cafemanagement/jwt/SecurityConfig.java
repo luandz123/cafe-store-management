@@ -30,7 +30,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             // Configure CORS
-            .cors(cors -> cors.configurationSource(request -> new org.springframework.web.cors.CorsConfiguration().applyPermitDefaultValues()))
+            .cors(cors -> cors.configurationSource(request -> {
+                org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+                config.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
+                config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                config.setAllowedHeaders(java.util.List.of("*"));
+                config.setAllowCredentials(true);
+                return config;
+            }))
 
             // Configure session management to be stateless
             .sessionManagement(sess -> sess
@@ -47,31 +54,36 @@ public class SecurityConfig {
                     "/api/users/reset-password",
                     "/api/products/getAll",
                     "/api/products/**",
-                    "/api/bills/report",
-                    "/api/bills",
-                    "/api/bills/**",
-                    "/api/bills/report/**",
-                    "/api/category/get",
+                    
+                    "/api/bills/add",
+                    
+                    "/api/bills/generate/**",
+                    "/api/category/getAll",
                     "/api/category/get/**"
                 ).permitAll()
 
                 // Các endpoint chỉ dành cho ADMIN
                 .requestMatchers(
-                    "/api/users/get",
-                    "/api/users/updateStatus",
+                    "/api/users/get/**",
+                    "/api/users/updateStatus/**",
                     "/api/category/add",
                     "/api/category/update/**",
                     "/api/category/delete/**",
                     "/api/products/add",
-                    "api//products/update/**"
+                    "/api/products/update/**",
+                    "/api/products/delete/**",
+                    "/api/bills/getAll",
+                    "/api/dashboard/getAll"
                 ).hasRole("ADMIN")
 
                 // Các endpoint dành cho USER và ADMIN
                 .requestMatchers(
-                    "/product/get/**",
-                    "/product/category/**",
+                    "/api/product/get/**",
+                    "/api/product/category/**",
                     "/api/bills/report",
-                    "/api/users/update"
+                    "/api/users/update/**",
+                    "/api/bills/delete/**",
+                    "api/bills/get/**"
                 ).hasAnyRole("USER", "ADMIN")
 
                 // Tất cả các request khác cần xác thực
@@ -92,19 +104,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                    .allowedOrigins("http://localhost:3000") // Địa chỉ frontend
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("*")
-                    .allowCredentials(true);
-            }
-        };
     }
 }

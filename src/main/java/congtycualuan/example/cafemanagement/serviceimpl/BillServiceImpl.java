@@ -84,7 +84,7 @@ public class BillServiceImpl implements BillService {
             table.addCell(bill.getEmail());
             table.addCell(bill.getPhone());
             table.addCell(bill.getPaymentMethod());
-            table.addCell(String.valueOf(bill.getTotal()));
+            table.addCell(bill.getTotal());
             table.addCell(bill.getProductDetail());
             table.addCell(bill.getCreatedBy());
 
@@ -97,7 +97,7 @@ public class BillServiceImpl implements BillService {
             log.info("Report generated successfully for bill ID: {}", id);
             return baos.toByteArray();
         } catch (Exception e) {
-            log.error("Error generating report for bill ID {}: {}", id, e);
+            log.error("Error generating report for bill ID {}: {}", id, e.getMessage());
             return new byte[0];
         }
     }

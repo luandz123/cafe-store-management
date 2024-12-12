@@ -1,0 +1,31 @@
+/* AdminPage.css */
+
+.container {
+    margin-top: 40px;
+  }
+  
+  .card-header {
+    background-color: #F4F6F8;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .card {
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-stat {
+    font-size: 30px;
+    font-weight: 600;
+  }
+  
+  .card-description {
+    color: gray;
+  }
+  
+  .divider {
+    margin: 20px 0;
+  }
+  

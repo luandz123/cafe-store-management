@@ -26,7 +26,7 @@ public class DashboardController {
     private CategoryService categoryService;
 
     // Get dashboard data
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<DashboardDTO> getDashboardData() {
         long productCount = productService.getProductCount();
         long billCount = billService.getBillCount();

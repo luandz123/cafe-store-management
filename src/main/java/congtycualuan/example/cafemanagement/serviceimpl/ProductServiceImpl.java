@@ -33,8 +33,8 @@ public class ProductServiceImpl implements ProductService {
                 return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
             }
 
-            productRepository.save(product);
-            return new ResponseEntity<>("Thêm sản phẩm thành công", HttpStatus.OK);
+            Product savedProduct = productRepository.save(product);
+            return new ResponseEntity<>("Thêm sản phẩm thành công", HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>("Thêm sản phẩm thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -107,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
         }
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @Override
     public long getProductCount() {
         return productRepository.count();
