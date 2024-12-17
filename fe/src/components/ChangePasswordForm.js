@@ -1,114 +1,151 @@
-// ChangePasswordForm.js
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Box } from '@mui/material';
-import axios from 'axios';
+import { TextField, Button, Box, Typography, Paper, Snackbar, Alert } from '@mui/material';
+import { forgotPassword, resetPassword } from '../service/api';
 
-const ChangePasswordForm = ({ onClose, authToken }) => {
-  const [oldPassword, setOldPassword] = useState('');
+const ChangePasswordForm = ({ onCancel }) => {
+  const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  
+  const [isTokenSent, setIsTokenSent] = useState(false);
+  
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageType, setMessageType] = useState('success');
 
-  const handleChangePassword = async () => {
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      setError('Tất cả các trường đều phải điền!');
+  const handleSendToken = async () => {
+    if (!email) {
+      setError('Vui lòng nhập email.');
       return;
     }
-    if (newPassword !== confirmPassword) {
-      setError('Mật khẩu mới và xác nhận mật khẩu không khớp!');
-      return;
-    }
-
-    setLoading(true);
     try {
-      const response = await axios.post(
-        '/api/users/change-password',
-        {
-          oldPassword,
-          newPassword,
-          confirmPassword,
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      setSuccess(response.data.message || 'Đổi mật khẩu thành công!');
+      await forgotPassword(email);
+      setMessage('Token đã được gửi đến email của bạn.');
+      setMessageType('success');
+      setOpenSnackbar(true);
+      setIsTokenSent(true);
       setError('');
-      onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Đã xảy ra lỗi!');
-      setSuccess('');
-    } finally {
-      setLoading(false);
+      setError('Gửi yêu cầu thất bại. Vui lòng thử lại.');
     }
   };
 
-  return (
-    <Box sx={{ width: '400px' }}>
-      <Dialog open={true} onClose={onClose}>
-        <DialogTitle>Đổi mật khẩu</DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" color="textSecondary" sx={{ marginBottom: 2 }}>
-            Vui lòng điền thông tin để thay đổi mật khẩu của bạn.
-          </Typography>
+  const handleResetPassword = async () => {
+    if (!token || !newPassword || !confirmPassword) {
+      setError('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
 
+    if (newPassword !== confirmPassword) {
+      setError('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+      return;
+    }
+
+    try {
+      await resetPassword(token, newPassword);
+      setMessage('Đặt lại mật khẩu thành công!');
+      setMessageType('success');
+      setOpenSnackbar(true);
+      setIsTokenSent(false);
+      setEmail('');
+      setToken('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setError('');
+      onCancel();
+    } catch (err) {
+      setError('Đặt lại mật khẩu thất bại. Vui lòng kiểm tra lại token.');
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
+
+  return (
+    <Paper elevation={3} sx={{ padding: 4, borderRadius: 3 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, color: '#1976d2', fontWeight: 'bold' }}>
+        {isTokenSent ? 'Đặt Lại Mật Khẩu' : 'Quên Mật Khẩu'}
+      </Typography>
+      
+      {!isTokenSent ? (
+        <>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           {error && (
-            <Typography variant="body2" color="error" sx={{ marginBottom: 2 }}>
+            <Typography color="error" sx={{ marginTop: 1 }}>
               {error}
             </Typography>
           )}
-
-          {success && (
-            <Typography variant="body2" color="success.main" sx={{ marginBottom: 2 }}>
-              {success}
-            </Typography>
-          )}
-
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginTop: 2 }}>
+            <Button variant="outlined" onClick={onCancel}>
+              Hủy
+            </Button>
+            <Button variant="contained" onClick={handleSendToken}>
+              Gửi Token
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <>
           <TextField
-            label="Mật khẩu cũ"
-            type="password"
-            variant="outlined"
+            label="Token"
+            type="text"
             fullWidth
-            sx={{ marginBottom: 2 }}
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
+            margin="normal"
+            variant="outlined"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
           />
-
           <TextField
             label="Mật khẩu mới"
             type="password"
-            variant="outlined"
             fullWidth
-            sx={{ marginBottom: 2 }}
+            margin="normal"
+            variant="outlined"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
-
           <TextField
-            label="Xác nhận mật khẩu"
+            label="Xác nhận mật khẩu mới"
             type="password"
-            variant="outlined"
             fullWidth
-            sx={{ marginBottom: 2 }}
+            margin="normal"
+            variant="outlined"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="secondary" variant="outlined" disabled={loading}>
-            Hủy
-          </Button>
-          <Button onClick={handleChangePassword} color="primary" variant="contained" disabled={loading}>
-            {loading ? 'Đang lưu...' : 'Lưu'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          {error && (
+            <Typography color="error" sx={{ marginTop: 1 }}>
+              {error}
+            </Typography>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginTop: 2 }}>
+            <Button variant="outlined" onClick={() => setIsTokenSent(false)}>
+              Quay lại
+            </Button>
+            <Button variant="contained" onClick={handleResetPassword}>
+              Đặt Lại Mật Khẩu
+            </Button>
+          </Box>
+        </>
+      )}
+
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity={messageType} sx={{ width: '100%' }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </Paper>
   );
 };
 

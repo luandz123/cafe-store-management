@@ -69,12 +69,5 @@ public class UserController {
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
         return userService.resetPassword(request);
     }
-    public UserProfileDTO getUserProfile(Authentication authentication) {
-        String currentUsername = authentication.getName();
-        
-        UserProfileDTO profile = new UserProfileDTO();
-        profile.setName("luan");
-        profile.setEmail("kakak");
-        // Thêm các thông tin khác nếu cần
-        return profile;
-}}
+    
+}

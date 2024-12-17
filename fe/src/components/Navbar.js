@@ -1,62 +1,57 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Button } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onLogout, onChangePassword, isAdminPage }) => { // Thêm prop isAdminPage để biết có phải đang ở trang Admin không
+const Navbar = ({ onLogout, isAdminPage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Open menu
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true);
   };
 
+  // Close menu
   const handleMenuClose = () => {
     setOpen(false);
     setAnchorEl(null);
   };
 
+  // Logout handler
   const handleSignOut = () => {
     onLogout();
-    navigate('/');  // Điều hướng về trang đăng nhập
-  };
-
-  const handleChangePassword = () => {
-    onChangePassword();
-    setOpen(false); // Đóng menu
+    navigate('/'); // Redirect to '/' which shows LoginForm
   };
 
   return (
-    <AppBar position="sticky">
-      <Toolbar>
-        <Typography variant="h6" style={{ flex: 1 }}>
-          Cafe Management System
-        </Typography>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          {/* Logo or App Name */}
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Coffee Management
+          </Typography>
 
-        {/* Hiển thị các nút đăng nhập, đăng ký chỉ nếu không phải ở trang Admin */}
-        {!isAdminPage && (
-          <>
-            <Button color="inherit" onClick={() => navigate('/login')}>Đăng nhập</Button>
-            <Button color="inherit" onClick={() => navigate('/signup')}>Đăng ký</Button>
-          </>
-        )}
+          {/* Account Icon */}
+          <IconButton color="inherit" onClick={handleMenuOpen}>
+            <AccountCircleIcon />
+          </IconButton>
 
-        <IconButton color="inherit" onClick={handleMenuOpen}>
-          <AccountCircleIcon />
-        </IconButton>
-
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={handleChangePassword}>Đổi mật khẩu</MenuItem>
-          <MenuItem onClick={handleSignOut}>Đăng xuất</MenuItem>
-        </Menu>
-      </Toolbar>
-    </AppBar>
+          {/* Account Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+          >
+            {/* Removed the Forgot Password MenuItem */}
+            <MenuItem onClick={handleSignOut}>Đăng Xuất</MenuItem>
+          </Menu>
+        </Toolbar>
+      </AppBar>
+    </>
   );
 };
 

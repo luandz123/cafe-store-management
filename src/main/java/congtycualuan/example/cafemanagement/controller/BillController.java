@@ -1,4 +1,3 @@
-// src/main/java/congtycualuan/example/cafemanagement/controller/BillController.java
 package congtycualuan.example.cafemanagement.controller;
 
 import congtycualuan.example.cafemanagement.model.Bill;

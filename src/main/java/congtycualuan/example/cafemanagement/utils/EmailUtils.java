@@ -12,7 +12,7 @@ public class EmailUtils {
 
     public void sendEmail(String toEmail, String subject, String body){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("luantu13579@gmail.com"); // Thay bằng email của bạn
+        message.setFrom("luantu13579@gmail.com"); 
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);

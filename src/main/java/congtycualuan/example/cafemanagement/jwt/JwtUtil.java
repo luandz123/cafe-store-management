@@ -18,7 +18,7 @@ public class JwtUtil {
     
     private String SECRET_KEY = "9yZW0gaXBzdW0gZG9sb3Ig9yZW0gaXBzdW0gZG9sb3Ig9yZW0gaXBzdW0gZG9sb3Ig9yZW0gaXBzdW0gZG9sb3Ig";
 
-    // Thời gian hết hạn token (ví dụ: 10 giờ)
+    // Thời gian hết hạn token (10 giờ)
     private final long JWT_TOKEN_VALIDITY = 10 * 60 * 60 * 1000;
 
     // Lấy username từ token

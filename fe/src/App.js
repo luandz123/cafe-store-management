@@ -15,15 +15,22 @@ import ManageProducts from './pages/ManageProducts';
 import ManageOrders from './pages/ManageOrders'; 
 import ViewBills from './pages/ViewBills'; // Import ViewBills component mới
 import ManageUsers from './pages/ManageUsers'; 
-import{login} from './service/api'
+import { login, signup } from './service/api'; // Thêm signup vào import
+
 function App() {
+  // Initialize to show Login form by default
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [showSignUpForm, setShowSignUpForm] = useState(false);
-  const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
+  // Removed showForgotPasswordForm
 
+  // Form fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [phone, setPhone] = useState(''); // Thêm state cho phone
+  const [username, setUsername] = useState(''); // Thêm state cho username
+
+  // Notification states
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -31,7 +38,6 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation(); // Lấy thông tin location hiện tại
-
 
   // Hàm xử lý đăng nhập
   const handleLogin = async () => {
@@ -42,7 +48,8 @@ function App() {
       setMessage('Đăng nhập thành công!');
       setMessageType('success');
       setOpenSnackbar(true);
-      navigate('/admin');
+      setShowLoginForm(false);
+      navigate('/admin/dashboard'); // Redirect to admin dashboard
     } catch (error) {
       setMessage('Thông tin đăng nhập không chính xác!');
       setMessageType('error');
@@ -51,14 +58,23 @@ function App() {
   };
 
   // Hàm xử lý đăng ký
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (password === confirmPassword) {
-      
-      setMessage('Đăng ký thành công!');
-      setMessageType('success');
-      setOpenSnackbar(true);
-      setShowSignUpForm(false);
-      setShowLoginForm(true);
+      // Gọi API đăng ký
+      try {
+        const userData = { phone, password, email, username };
+        // Thực hiện đăng ký với userData
+        // Giả định gọi API signUp
+        // const response = await signup(userData);
+        setMessage('Đăng ký thành công!');
+        setMessageType('success');
+        setOpenSnackbar(true);
+        setShowSignUpForm(false);
+      } catch (error) {
+        setMessage('Đăng ký thất bại!');
+        setMessageType('error');
+        setOpenSnackbar(true);
+      }
     } else {
       setMessage('Mật khẩu và xác nhận mật khẩu không khớp!');
       setMessageType('error');
@@ -93,6 +109,20 @@ function App() {
   // Kiểm tra xem có phải đang ở trang admin không
   const isAdminPage = location.pathname.startsWith('/admin');
 
+  // Hàm chuyển sang form đăng nhập và đóng form đăng ký
+  const switchToLogin = () => {
+    setShowLoginForm(true);
+    setShowSignUpForm(false);
+    // Removed setShowForgotPasswordForm
+  };
+
+  // Hàm chuyển sang form đăng ký và đóng form đăng nhập
+  const switchToSignUp = () => {
+    setShowSignUpForm(true);
+    setShowLoginForm(false);
+    // Removed setShowForgotPasswordForm
+  };
+
   return (
     <OrderProvider>
       <div className="App">
@@ -116,9 +146,7 @@ function App() {
                           password={password}
                           setPassword={setPassword}
                           handleLogin={handleLogin}
-                          setShowLoginForm={setShowLoginForm}
-                          handleSignUpClick={() => setShowSignUpForm(true)}
-                          handleForgotPasswordClick={() => setShowForgotPasswordForm(true)}
+                          switchToSignUp={switchToSignUp}
                         />
                       )}
 
@@ -130,18 +158,16 @@ function App() {
                           setPassword={setPassword}
                           confirmPassword={confirmPassword}
                           setConfirmPassword={setConfirmPassword}
+                          phone={phone} // Thêm prop cho phone
+                          setPhone={setPhone} // Thêm prop cho setPhone
+                          username={username} // Thêm prop cho username
+                          setUsername={setUsername} // Thêm prop cho setUsername
                           handleSignUp={handleSignUp}
-                          setShowSignUpForm={setShowSignUpForm}
+                          switchToLogin={switchToLogin}
                         />
                       )}
 
-                      {showForgotPasswordForm && !isAdminPage && (
-                        <ForgotPasswordForm
-                          email={email}
-                          setEmail={setEmail}
-                          setShowForgotPasswordForm={setShowForgotPasswordForm}
-                        />
-                      )}
+                      {/* Removed showForgotPasswordForm */}
                     </CardContent>
                   </Card>
                 </Grid>
@@ -153,11 +179,27 @@ function App() {
           <Route path="/admin/*" element={(
             <div style={{ display: 'flex' }}>
               {/* Thanh điều hướng bên trái */}
-              <Sidebar onLogout={() => navigate('/')} />
+              <Sidebar onLogout={() => {
+                // Clear token on logout
+                localStorage.removeItem('authToken');
+                // Set state to show login form
+                setShowLoginForm(true);
+                setShowSignUpForm(false);
+                // Navigate to '/'
+                navigate('/');
+              }} />
 
               {/* Nội dung của trang Admin */}
               <div style={{ flex: 1 }}>
-                <Navbar onLogout={() => navigate('/')} onChangePassword={handleChangePasswordClick} isAdminPage={isAdminPage} />
+                <Navbar onLogout={() => {
+                  // Clear token on logout
+                  localStorage.removeItem('authToken');
+                  // Set state to show login form
+                  setShowLoginForm(true);
+                  setShowSignUpForm(false);
+                  // Navigate to '/'
+                  navigate('/');
+                }} onChangePassword={handleChangePasswordClick} isAdminPage={isAdminPage} />
                 <Routes>
                   {/* Liên kết tới Dashboard */}
                   <Route path="dashboard" element={<Dashboard />} />
@@ -188,21 +230,14 @@ function App() {
         </Snackbar>
 
         {/* Dialog thay đổi mật khẩu */}
-        <Dialog open={openChangePasswordDialog} onClose={handleCloseChangePasswordDialog}> {/* Truyền hàm đóng vào onClose */}
+        <Dialog open={openChangePasswordDialog} onClose={handleCloseChangePasswordDialog}>
           <DialogTitle>Đổi mật khẩu</DialogTitle>
           <DialogContent>
-            <ChangePasswordForm />
+            {/* Chỉ render một form và truyền props cần thiết */}
+            <ChangePasswordForm onClose={handleCloseChangePasswordDialog} />
           </DialogContent>
           <DialogActions>
-            {/* Nút Hủy */}
-            <Button onClick={handleCloseChangePasswordDialog} color="primary">
-              Hủy
-            </Button>
-
-            {/* Nút Lưu */}
-            <Button onClick={handleSaveChangePassword} color="primary">
-              Lưu
-            </Button>
+            <Button onClick={handleCloseChangePasswordDialog}>Đóng</Button>
           </DialogActions>
         </Dialog>
       </div>
