@@ -1,0 +1,456 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Nút Đăng nhập và Đăng ký */
+.navbar-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #f4b400, #ff6f00); /* Hiệu ứng gradient */
+    border: none;
+    border-radius: 25px; /* Bo góc tròn */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .navbar-button:hover {
+    background: linear-gradient(45deg, #ff6f00, #f4b400); /* Đảo ngược gradient */
+    transform: translateY(-2px); /* Nổi lên */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Tăng đổ bóng */
+  }
+  
+  .navbar-button:active {
+    transform: translateY(0); /* Giảm hiệu ứng khi nhấn */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* Giảm đổ bóng */
+  }
+  
+  /* Hiệu ứng hover cho các mục trên navbar */
+  .navbar .navbar-nav a {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 1rem;
+    text-transform: capitalize; /* Chữ hoa đầu từ */
+    position: relative; /* Để hỗ trợ hiệu ứng */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .navbar .navbar-nav a:hover {
+    color: #f4b400; /* Đổi màu chữ sang vàng */
+  }
+  
+  .navbar .navbar-nav a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    background: #f4b400; /* Gạch dưới vàng */
+    transition: width 0.3s ease-in-out;
+    margin: 0 auto;
+  }
+  
+  .navbar .navbar-nav a:hover::after {
+    width: 100%; /* Hiệu ứng gạch dưới chạy ngang */
+  }
+  
+  /* Hiệu ứng cho các biểu tượng */
+  .navbar .navbar-extra .icon {
+    font-size: 1.5rem;
+    margin-left: 1.2rem;
+    color: white;
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .navbar .navbar-extra .icon:hover {
+    color: #f4b400; /* Đổi màu vàng khi hover */
+    transform: scale(1.2); /* Phóng to nhẹ */
+  }
+  
+  /* Responsive cho navbar */
+  @media (max-width: 768px) {
+    .navbar .navbar-nav {
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(0, 0, 0, 0.9);
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 10px;
+      border-top: 1px solid #f4b400;
+      display: none; /* Ẩn mặc định */
+    }
+  
+    .navbar .navbar-nav.active {
+      display: flex; /* Hiện ra khi mở menu */
+    }
+  
+    .navbar .navbar-nav a {
+      margin: 10px 0;
+    }
+  }
+  
+  
+  
+  
+  .section {
+    padding: 100px 20px;
+    text-align: center;
+  }
+  
+  /* Bổ sung cho phần #home */
+#home {
+    background: url('./images/banner.jpg') no-repeat center center/cover; /* Hình nền banner */
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative; /* Để hỗ trợ thêm các lớp overlay */
+  }
+  
+  /* Overlay làm mờ hình nền */
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Làm mờ nền */
+    z-index: 1;
+  }
+  
+  /* Nội dung trên #home */
+  #home .home-content {
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm trên lớp overlay */
+    max-width: 800px; /* Để căn giữa nội dung */
+  }
+  
+  /* Cập nhật tiêu đề chính (h1) */
+#home .home-content h1 {
+    font-size: 4rem; /* Kích thước lớn hơn */
+    font-weight: 800; /* Đậm hơn */
+    margin-bottom: 20px;
+    color: #fff; /* Màu trắng sáng */
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7); /* Tăng hiệu ứng bóng để làm nổi bật chữ */
+  }
+  
+  /* Cập nhật đoạn mô tả (p) */
+  #home .home-content p {
+    font-size: 1rem; /* Kích thước nhỏ hơn */
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8); /* Màu chữ nhạt hơn để không lấn át tiêu đề */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Hiệu ứng bóng nhẹ hơn */
+    max-width: 700px; /* Giới hạn chiều rộng đoạn văn */
+    margin: 0 auto; /* Căn giữa đoạn văn */
+  }
+  
+  
+  /* Thêm nút trong phần #home */
+  #home .home-buttons {
+    margin-top: 20px;
+  }
+  
+  #home .home-buttons a {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: #333; /* Màu chữ đen */
+    background-color: #f4b400; /* Màu nền vàng */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  #home .home-buttons a:hover {
+    background-color: #333; /* Đổi màu nền sang đen */
+    color: #f4b400; /* Đổi màu chữ sang vàng */
+  }
+  
+ /* Phần About Us */
+/* Phần About Us */
+#about {
+    padding: 100px 7%;
+    background-color: black; /* Nền đen */
+    color: white; /* Màu chữ trắng */
+    text-align: center;
+  }
+  
+  #about .about-title {
+    font-size: 2.5rem; /* Kích thước tiêu đề */
+    font-weight: bold;
+    color: #f4b400; /* Màu vàng */
+    margin-bottom: 30px; /* Khoảng cách dưới tiêu đề */
+    text-transform: uppercase; /* Chữ in hoa */
+  }
+  
+  #about .about-title span {
+    color: white; /* Màu trắng cho chữ "Us" */
+  }
+  
+  #about .about-content {
+    display: flex;
+    flex-wrap: wrap; /* Hỗ trợ xuống dòng khi màn hình nhỏ */
+    justify-content: center; /* Căn giữa */
+    align-items: center;
+    gap: 30px; /* Khoảng cách giữa ảnh và văn bản */
+  }
+  
+  #about .about-image {
+    width: 300px; /* Kích thước ảnh */
+    height: 200px; /* Chiều cao ảnh */
+    background-image: url('./images/coffee-cup.jpg'); /* Đường dẫn ảnh */
+    background-size: cover; /* Phủ kín ảnh */
+    background-position: center; /* Căn giữa ảnh */
+    border-radius: 10px; /* Bo góc ảnh */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng */
+  }
+  
+  #about .about-text {
+    max-width: 600px; /* Giới hạn chiều rộng văn bản */
+    text-align: left; /* Căn lề trái */
+  }
+  
+  #about .about-text p {
+    font-size: 1rem; /* Kích thước chữ */
+    line-height: 1.8; /* Khoảng cách dòng */
+    color: rgba(255, 255, 255, 0.8); /* Màu trắng nhạt */
+    margin-bottom: 20px; /* Khoảng cách giữa các đoạn */
+  }
+  
+  #about .about-text p strong {
+    color: #f4b400; /* Màu vàng nổi bật cho "PTIT Coffee" */
+  }
+
+  /* Phần Menu Kami */
+#menu {
+    padding: 100px 7%;
+    background-color: black; /* Nền đen */
+    color: white; /* Màu chữ trắng */
+    text-align: center;
+  }
+  
+  #menu .menu-title {
+    font-size: 2.5rem; /* Kích thước tiêu đề */
+    font-weight: bold;
+    color: #f4b400; /* Màu vàng */
+    margin-bottom: 20px; /* Khoảng cách bên dưới tiêu đề */
+    text-transform: uppercase; /* Chữ in hoa */
+  }
+  
+  #menu .menu-title span {
+    color: white; /* Màu trắng cho chữ "Kami" */
+  }
+  
+  #menu .menu-description {
+    font-size: 1rem; /* Kích thước chữ mô tả */
+    line-height: 1.8; /* Khoảng cách dòng */
+    color: rgba(255, 255, 255, 0.8); /* Màu chữ nhạt */
+    margin-bottom: 40px; /* Khoảng cách dưới mô tả */
+  }
+  
+  #menu .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Tự động điều chỉnh số cột */
+    gap: 30px; /* Khoảng cách giữa các mục */
+  }
+  
+  #menu .menu-item {
+    text-align: center;
+  }
+  
+  /* Ảnh cho các sản phẩm trong Menu */
+.menu-item-image {
+    width: 150px; /* Kích thước ảnh */
+    height: 150px;
+    background-size: cover; /* Phủ kín ảnh */
+    background-position: center;
+    margin: 0 auto; /* Căn giữa */
+    border-radius: 50%; /* Hình tròn */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng */
+  }
+  
+  /* Ảnh cho từng sản phẩm */
+  .menu-item-image.image-1 {
+    background-image: url('./images/bacxiu.jpg');
+  }
+  
+  .menu-item-image.image-2 {
+    background-image: url('./images/caffedenda.jpg');
+  }
+  
+  .menu-item-image.image-3 {
+    background-image: url('./images/espresso.jpg');
+  }
+  
+  .menu-item-image.image-4 {
+    background-image: url('./images/Cassia.jpg');
+  }
+  .menu-item-image.image-5 {
+    background-image: url('./images/cafesua.jpg');
+  }
+  .menu-item-image.image-6 {
+    background-image: url('./images/sinhto.jpg');
+  }
+  .menu-item-image.image-7 {
+    background-image: url('./images/cafedaxayphakem.jpg');
+  }
+  
+  .menu-item-image.image-8 {
+    background-image: url('./images/trasua.jpg');
+  }
+  .menu-item-image.image-9 {
+    background-image: url('./images/chocolate.jpg');
+  }
+  .menu-item-image.image-10 {
+    background-image: url('./images/soda.jpg');
+  }
+  
+  
+  
+  
+  #menu .menu-item-name {
+    font-size: 1.2rem; /* Kích thước tên sản phẩm */
+    font-weight: bold;
+    color: white;
+    margin-top: 15px; /* Khoảng cách phía trên tên */
+  }
+  
+  #menu .menu-item-price {
+    font-size: 1rem; /* Kích thước giá */
+    color: rgba(255, 255, 255, 0.8); /* Màu chữ nhạt */
+    margin-top: 5px; /* Khoảng cách phía trên giá */
+  }
+  
+  
+  
+    /* Phần Contact */
+/* Phần Contact */
+#contact {
+    padding: 100px 7%;
+    background-color: black; /* Nền đen */
+    color: white;
+    text-align: center;
+  }
+  
+  #contact .contact-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f4b400; /* Màu vàng */
+    margin-bottom: 40px;
+    text-transform: uppercase; /* Chữ in hoa */
+  }
+  
+  #contact .contact-title span {
+    color: white; /* Màu trắng cho chữ "PTIT" */
+  }
+  
+  #contact .contact-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Khoảng cách giữa các khối */
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  /* Bản đồ trong phần contact */
+  /* Phần bản đồ trong Contact */
+.contact-map {
+    flex: 1;
+    min-width: 350px; /* Tăng chiều rộng */
+    max-width: 50%; /* Đảm bảo bản đồ chiếm một nửa chiều rộng */
+    height: 350px; /* Chiều cao bản đồ */
+    background-image: url('./images/map.png'); /* Sử dụng đường dẫn ảnh */
+    background-size: cover; /* Phủ kín ảnh */
+    background-position: center; /* Căn giữa ảnh */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng */
+  }
+  
+  
+  /* Biểu mẫu liên hệ */
+  .contact-form {
+    flex: 1;
+    min-width: 350px;
+    max-width: 50%; /* Đảm bảo biểu mẫu chiếm 50% màn hình */
+    background-color: #333; /* Nền xám đậm */
+    padding: 20px;
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Hiệu ứng đổ bóng */
+  }
+  
+  .contact-form .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Khoảng cách giữa các trường */
+  }
+  
+  .contact-form .form-group i {
+    font-size: 1.5rem;
+    color: #f4b400; /* Màu vàng */
+    margin-right: 10px; /* Khoảng cách giữa logo và ô điền */
+  }
+  
+  .contact-form input[type="text"],
+  .contact-form input[type="email"],
+  .contact-form input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #444; /* Nền xám nhạt */
+    color: white; /* Chữ trắng */
+    pointer-events: none; /* Ngăn không cho người dùng điền thông tin */
+  }
+  
+  .contact-form .rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .contact-form .rating .stars {
+    font-size: 1.5rem;
+    color: #f4b400; /* Màu vàng cho sao */
+  }
+  
+  .contact-form .btn-submit {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #f4b400; /* Màu vàng */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-form .btn-submit:hover {
+    background-color: #333; /* Đổi màu nền khi hover */
+    color: #f4b400; /* Đổi màu chữ khi hover */
+  }
+  
+  
+  

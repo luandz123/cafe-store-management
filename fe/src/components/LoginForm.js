@@ -1,16 +1,38 @@
-import React from 'react';
-import { TextField, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Alert, Box } from '@mui/material';
 
 const LoginForm = ({ email, setEmail, password, setPassword, handleLogin, setShowLoginForm }) => {
-  
+  const [errorMessage, setErrorMessage] = useState(''); // Quản lý thông báo lỗi
+
   // Hàm xử lý sự kiện submit của form
   const onSubmit = (e) => {
     e.preventDefault(); // Ngừng hành động mặc định của form (tự động làm mới trang)
+
+    // Kiểm tra email và password
+    if (!email || !password) {
+      setErrorMessage('Vui lòng nhập đầy đủ email và mật khẩu.');
+      return;
+    }
+
+    // Kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Địa chỉ email không hợp lệ.');
+      return;
+    }
+
+    // Xác thực thành công
+    setErrorMessage(''); // Xóa lỗi nếu có
     handleLogin(); // Gọi hàm handleLogin để thực hiện logic đăng nhập
   };
 
   return (
     <form onSubmit={onSubmit}>
+      {errorMessage && (
+        <Box mb={2}>
+          <Alert severity="error">{errorMessage}</Alert>
+        </Box>
+      )}
       <TextField
         label="Email"
         fullWidth
