@@ -1,74 +1,86 @@
 import React, { useState } from 'react';
-import { TextField, Button, Alert, Box } from '@mui/material';
+import { TextField, Button, Box, Typography, Paper, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import ForgotPasswordForm from './ForgotPasswordForm'; // Import the ForgotPasswordForm
 
-const LoginForm = ({ email, setEmail, password, setPassword, handleLogin, setShowLoginForm }) => {
-  const [errorMessage, setErrorMessage] = useState(''); // Quản lý thông báo lỗi
+const LoginForm = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  handleLogin,
+  switchToSignUp
+}) => {
+  // State to control Forgot Password Dialog
+  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] = useState(false);
 
-  // Hàm xử lý sự kiện submit của form
-  const onSubmit = (e) => {
-    e.preventDefault(); // Ngừng hành động mặc định của form (tự động làm mới trang)
+  const handleOpenForgotPassword = () => {
+    setOpenForgotPasswordDialog(true);
+  };
 
-    // Kiểm tra email và password
-    if (!email || !password) {
-      setErrorMessage('Vui lòng nhập đầy đủ email và mật khẩu.');
-      return;
-    }
-
-    // Kiểm tra định dạng email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setErrorMessage('Địa chỉ email không hợp lệ.');
-      return;
-    }
-
-    // Xác thực thành công
-    setErrorMessage(''); // Xóa lỗi nếu có
-    handleLogin(); // Gọi hàm handleLogin để thực hiện logic đăng nhập
+  const handleCloseForgotPassword = () => {
+    setOpenForgotPasswordDialog(false);
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      {errorMessage && (
-        <Box mb={2}>
-          <Alert severity="error">{errorMessage}</Alert>
+    <Paper elevation={3} sx={{ padding: 4, borderRadius: 3 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, textAlign: 'center', color: '#1976d2', fontWeight: 'bold' }}>
+        Đăng Nhập
+      </Typography>
+      
+      <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+        <TextField
+          label="Email"
+          type="email"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        
+        <TextField
+          label="Mật khẩu"
+          type="password"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+          <Button variant="contained" type="submit" fullWidth>
+            Đăng Nhập
+          </Button>
         </Box>
-      )}
-      <TextField
-        label="Email"
-        fullWidth
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị email
-        variant="outlined"
-        margin="normal"
-      />
-      <TextField
-        label="Mật khẩu"
-        fullWidth
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)} // Cập nhật giá trị password
-        variant="outlined"
-        margin="normal"
-      />
-      <Button 
-        fullWidth 
-        variant="contained" 
-        color="primary" 
-        type="submit" // Dùng type="submit" để gọi hàm onSubmit khi người dùng nhấn nút
-        sx={{ marginTop: 2 }}
-      >
-        Đăng nhập
-      </Button>
-      <Button 
-        fullWidth 
-        variant="text" 
-        sx={{ marginTop: 2 }} 
-        onClick={() => setShowLoginForm(false)} // Chuyển sang form đăng ký hoặc quên mật khẩu
-      >
-        Quay lại
-      </Button>
-    </form>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
+          <Button 
+            variant="text" 
+            onClick={switchToSignUp}
+          >
+            Đăng ký
+          </Button>
+          <Button 
+            variant="text" 
+            onClick={handleOpenForgotPassword} // Add Forgot Password button
+          >
+            Quên Mật Khẩu
+          </Button>
+        </Box>
+      </form>
+
+      {/* Forgot Password Dialog */}
+      <Dialog open={openForgotPasswordDialog} onClose={handleCloseForgotPassword}>
+        <DialogTitle>Quên Mật Khẩu</DialogTitle>
+        <DialogContent>
+          <ForgotPasswordForm onCancel={handleCloseForgotPassword} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseForgotPassword}>Đóng</Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 };
 

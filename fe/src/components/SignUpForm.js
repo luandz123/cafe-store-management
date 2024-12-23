@@ -1,6 +1,5 @@
-// src/components/SignUpForm.js
 import React from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Grid } from '@mui/material';
 
 const SignUpForm = ({
   email,
@@ -9,85 +8,118 @@ const SignUpForm = ({
   setPassword,
   confirmPassword,
   setConfirmPassword,
-  username,
-  setUsername,
   phone,
   setPhone,
+  username,
+  setUsername,
   handleSignUp,
-  setShowSignUpForm
+  switchToLogin
 }) => {
 
-  // Hàm xử lý sự kiện submit của form
-  const onSubmit = (e) => {
-    e.preventDefault(); // Ngừng hành động mặc định của form (tự động làm mới trang)
-    handleSignUp(); // Gọi hàm handleSignUp để thực hiện logic đăng ký
+  // Hàm xử lý submit form
+  const handleSubmit = (e) => {
+    e.preventDefault();  // Ngăn không cho form reload trang
+    handleSignUp();      // Gọi hàm handleSignUp từ props khi form được submit
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <Typography variant="h5" gutterBottom>
-        Đăng ký
-      </Typography>
-      <TextField
-        label="Tên người dùng"
-        fullWidth
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
-      <TextField
-        label="Số điện thoại"
-        fullWidth
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
-      <TextField
-        label="Email"
-        fullWidth
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
-      <TextField
-        label="Mật khẩu"
-        fullWidth
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
-      <TextField
-        label="Xác nhận mật khẩu"
-        fullWidth
-        type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
-      <Button 
-        fullWidth 
-        variant="contained" 
-        color="primary" 
-        type="submit" // Dùng type="submit" để gọi hàm onSubmit khi người dùng nhấn nút
-        sx={{ marginTop: 2 }}
-      >
-        Đăng ký
-      </Button>
-      <Button 
-        fullWidth 
-        variant="text" 
-        sx={{ marginTop: 1 }} 
-        onClick={() => setShowSignUpForm(false)} // Quay lại form đăng nhập
-      >
-        Quay lại Đăng nhập
-      </Button>
+    <form onSubmit={handleSubmit}>
+      <Grid container spacing={2}>
+        {/* Email Field */}
+        <Grid item xs={12}>
+          <TextField
+            label="Email"
+            fullWidth
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+        </Grid>
+
+        {/* Password Field */}
+        <Grid item xs={12}>
+          <TextField
+            label="Mật khẩu"
+            fullWidth
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+        </Grid>
+
+        {/* Confirm Password Field */}
+        <Grid item xs={12}>
+          <TextField
+            label="Xác nhận mật khẩu"
+            fullWidth
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+        </Grid>
+
+        {/* Phone Field */}
+        <Grid item xs={12}>
+          <TextField
+            label="Số điện thoại"
+            fullWidth
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+        </Grid>
+        
+        {/* Username Field */}
+        <Grid item xs={12}>
+          <TextField
+            label="Tên người dùng"
+            fullWidth
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+        </Grid>
+
+        {/* Submit Button */}
+        <Grid item xs={12}>
+          <Button 
+            type="submit" 
+            fullWidth 
+            variant="contained" 
+            color="primary" 
+            sx={{ marginTop: 2 }}
+          >
+            Đăng ký
+          </Button>
+        </Grid>
+
+        {/* Switch to Login Button */}
+        <Grid item xs={12}>
+          <Button 
+            fullWidth 
+            variant="text" 
+            sx={{ marginTop: 2 }} 
+            onClick={switchToLogin} // Chuyển sang form đăng nhập và đóng form đăng ký
+          >
+            Đăng nhập
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

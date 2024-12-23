@@ -1,111 +1,164 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Paper } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email'; // Thêm icon cho input
-import { forgotPassword } from '../service/api';
+import { TextField, Button, Box, Typography, Paper, Snackbar, Alert } from '@mui/material';
+import axios from 'axios';
 
-const ForgotPasswordForm = ({ onClose }) => {
+const API_BASE_URL = 'http://localhost:8080/api/users';
+
+const ForgotPasswordForm = ({ onCancel }) => {
   const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  const [isTokenSent, setIsTokenSent] = useState(false);
+  
+  const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageType, setMessageType] = useState('success');
-  const [loading, setLoading] = useState(false);
 
-  const handleForgotPassword = async () => {
+  const forgotPassword = async (email) => {
+    const response = await axios.post(`${API_BASE_URL}/forgot-password`, { email });
+    return response.data;
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    const response = await axios.post(`${API_BASE_URL}/reset-password`, { token, newPassword });
+    return response.data;
+  };
+
+  const handleSendToken = async () => {
     if (!email) {
-      setMessage('Vui lòng nhập email!');
-      setMessageType('error');
+      setError('Vui lòng nhập email.');
       return;
     }
-
-    setLoading(true);
     try {
-      const data = { email };
-      const response = await forgotPassword(data);
-      setMessage(response.data.message || 'Nếu email tồn tại, bạn sẽ nhận được hướng dẫn qua email.');
+      await forgotPassword(email);
+      setMessage('Token đã được gửi đến email của bạn.');
       setMessageType('success');
-      setEmail('');
-      onClose();
+      setOpenSnackbar(true);
+      setIsTokenSent(true);
+      setError('');
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Đã xảy ra lỗi!');
-      setMessageType('error');
-    } finally {
-      setLoading(false);
+      setError('Gửi yêu cầu thất bại. Vui lòng thử lại.');
     }
   };
 
+  const handleResetPassword = async () => {
+    if (!token || !newPassword || !confirmPassword) {
+      setError('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('Mật khẩu mới và xác nhận mật khẩu không khớp.');
+      return;
+    }
+
+    try {
+      await resetPassword(token, newPassword);
+      setMessage('Đặt lại mật khẩu thành công!');
+      setMessageType('success');
+      setOpenSnackbar(true);
+      // Reset form state
+      setIsTokenSent(false);
+      setEmail('');
+      setToken('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setError('');
+      // Close the form/dialog
+      onCancel();
+    } catch (err) {
+      setError('Đặt lại mật khẩu thất bại. Vui lòng kiểm tra lại token.');
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <Paper elevation={3} sx={{ padding: 4, width: '400px', margin: 'auto', textAlign: 'center' }}>
-      {/* Tiêu đề */}
-      <Typography variant="h5" gutterBottom sx={{ color: '#1976d2', fontWeight: 'bold' }}>
-        Quên Mật Khẩu
+    <Paper elevation={3} sx={{ padding: 4, borderRadius: 3 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, color: '#1976d2', fontWeight: 'bold' }}>
+        {isTokenSent ? 'Đặt Lại Mật Khẩu' : 'Quên Mật Khẩu'}
       </Typography>
-
-      {/* Thêm hình ảnh hoặc biểu tượng */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
-        <img 
-          src="https://cdn-icons-png.flaticon.com/512/561/561127.png" 
-          alt="Forgot Password" 
-          width="80"
-          height="80"
-        />
-      </Box>
-
-      {/* Thông báo */}
-      {message && (
-        <Typography
-          variant="body2"
-          color={messageType === 'error' ? 'error' : 'success.main'}
-          sx={{ marginBottom: 2 }}
-        >
-          {message}
-        </Typography>
+      
+      {!isTokenSent ? (
+        <>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {error && (
+            <Typography color="error" sx={{ marginTop: 1 }}>
+              {error}
+            </Typography>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginTop: 2 }}>
+            <Button variant="outlined" onClick={onCancel}>
+              Hủy
+            </Button>
+            <Button variant="contained" onClick={handleSendToken}>
+              Gửi Token
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <>
+          <TextField
+            label="Token"
+            type="text"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
+          />
+          <TextField
+            label="Mật khẩu mới"
+            type="password"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <TextField
+            label="Xác nhận mật khẩu mới"
+            type="password"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          {error && (
+            <Typography color="error" sx={{ marginTop: 1 }}>
+              {error}
+            </Typography>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginTop: 2 }}>
+            <Button variant="outlined" onClick={() => setIsTokenSent(false)}>
+              Quay lại
+            </Button>
+            <Button variant="contained" onClick={handleResetPassword}>
+              Đặt Lại Mật Khẩu
+            </Button>
+          </Box>
+        </>
       )}
 
-      {/* Input email */}
-      <TextField
-        label="Email"
-        type="email"
-        variant="outlined"
-        fullWidth
-        sx={{ marginBottom: 3 }}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 1 }}>
-              <EmailIcon color="primary" />
-            </Box>
-          ),
-        }}
-      />
-
-      {/* Nút thao tác */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-        <Button
-          onClick={onClose}
-          color="secondary"
-          variant="outlined"
-          disabled={loading}
-          sx={{
-            textTransform: 'none',
-            '&:hover': { backgroundColor: '#f0f0f0' },
-          }}
-        >
-          Hủy
-        </Button>
-        <Button
-          onClick={handleForgotPassword}
-          color="primary"
-          variant="contained"
-          disabled={loading}
-          sx={{
-            textTransform: 'none',
-            backgroundColor: '#1976d2',
-            '&:hover': { backgroundColor: '#135ba1' },
-          }}
-        >
-          {loading ? 'Đang gửi...' : 'Gửi'}
-        </Button>
-      </Box>
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity={messageType} sx={{ width: '100%' }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 };

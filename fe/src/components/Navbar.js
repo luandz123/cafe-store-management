@@ -1,3 +1,4 @@
+// src/components/Navbar.js
 import React, { useState } from 'react';
 import {
   AppBar,
@@ -7,25 +8,22 @@ import {
   Menu,
   MenuItem,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Badge,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-scroll';
-import LoginForm from './LoginForm'; // Import form đăng nhập
-import SignUpForm from './SignUpForm'; // Import form đăng ký
 
-const Navbar = ({ isAdminPage, onLogin, onSignUp }) => {
+const Navbar = ({
+  isAdminPage,
+  onLogout,
+  onChangePassword,
+  openLoginForm,
+  openSignUpForm,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [cartCount, setCartCount] = useState(3); // Demo số lượng trong giỏ hàng
-  const [showLoginForm, setShowLoginForm] = useState(false);
-  const [showSignUpForm, setShowSignUpForm] = useState(false);
   const navigate = useNavigate();
 
   // Mở menu
@@ -36,6 +34,30 @@ const Navbar = ({ isAdminPage, onLogin, onSignUp }) => {
   // Đóng menu
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  // Xử lý đăng xuất
+  const handleLogoutClick = () => {
+    onLogout();
+    handleMenuClose();
+  };
+
+  // Xử lý đổi mật khẩu
+  const handleChangePasswordClick = () => {
+    onChangePassword();
+    handleMenuClose();
+  };
+
+  // Mở dialog đăng nhập
+  const handleOpenLoginDialog = () => {
+    openLoginForm();
+    handleMenuClose();
+  };
+
+  // Mở dialog đăng ký
+  const handleOpenSignUpDialog = () => {
+    openSignUpForm();
+    handleMenuClose();
   };
 
   return (
@@ -52,6 +74,7 @@ const Navbar = ({ isAdminPage, onLogin, onSignUp }) => {
               color: '#f4b400',
               cursor: 'pointer',
             }}
+            onClick={() => navigate('/')}
           >
             PTIT Coffee
           </Typography>
@@ -59,49 +82,17 @@ const Navbar = ({ isAdminPage, onLogin, onSignUp }) => {
           {/* Hiển thị các nút cuộn mượt (chỉ hiển thị khi không phải trang Admin) */}
           {!isAdminPage && (
             <>
-              <Button color="inherit">
-                <Link
-                  to="home"
-                  smooth={true}
-                  duration={500}
-                  offset={-70}
-                  style={{ textDecoration: 'none', color: 'white' }}
-                >
-                  Home
-                </Link>
+              <Button color="inherit" href="#home">
+                Home
               </Button>
-              <Button color="inherit">
-                <Link
-                  to="about"
-                  smooth={true}
-                  duration={500}
-                  offset={-70}
-                  style={{ textDecoration: 'none', color: 'white' }}
-                >
-                  About
-                </Link>
+              <Button color="inherit" href="#about">
+                About
               </Button>
-              <Button color="inherit">
-                <Link
-                  to="menu"
-                  smooth={true}
-                  duration={500}
-                  offset={-70}
-                  style={{ textDecoration: 'none', color: 'white' }}
-                >
-                  Menu
-                </Link>
+              <Button color="inherit" href="#menu">
+                Menu
               </Button>
-              <Button color="inherit">
-                <Link
-                  to="contact"
-                  smooth={true}
-                  duration={500}
-                  offset={-70}
-                  style={{ textDecoration: 'none', color: 'white' }}
-                >
-                  Contact
-                </Link>
+              <Button color="inherit" href="#contact">
+                Contact
               </Button>
             </>
           )}
@@ -125,54 +116,20 @@ const Navbar = ({ isAdminPage, onLogin, onSignUp }) => {
 
           {/* Menu dropdown */}
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-            <MenuItem
-              onClick={() => {
-                setShowLoginForm(true);
-                handleMenuClose();
-              }}
-            >
-              Đăng nhập
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setShowSignUpForm(true);
-                handleMenuClose();
-              }}
-            >
-              Đăng ký
-            </MenuItem>
+            {!isAdminPage ? (
+              <>
+                <MenuItem onClick={handleOpenLoginDialog}>Đăng nhập</MenuItem>
+                <MenuItem onClick={handleOpenSignUpDialog}>Đăng ký</MenuItem>
+              </>
+            ) : (
+              <>
+                <MenuItem onClick={handleChangePasswordClick}>Đổi mật khẩu</MenuItem>
+                <MenuItem onClick={handleLogoutClick}>Đăng xuất</MenuItem>
+              </>
+            )}
           </Menu>
         </Toolbar>
       </AppBar>
-
-      {/* Dialog Form Đăng nhập */}
-      {showLoginForm && (
-        <Dialog open={showLoginForm} onClose={() => setShowLoginForm(false)}>
-          <DialogTitle>Đăng nhập</DialogTitle>
-          <DialogContent>
-            <LoginForm
-              onLoginSuccess={() => {
-                setShowLoginForm(false);
-                navigate('/admin'); // Chuyển hướng đến trang admin sau khi đăng nhập thành công
-              }}
-            />
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Dialog Form Đăng ký */}
-      {showSignUpForm && (
-        <Dialog open={showSignUpForm} onClose={() => setShowSignUpForm(false)}>
-          <DialogTitle>Đăng ký</DialogTitle>
-          <DialogContent>
-            <SignUpForm
-              onSignUpSuccess={() => {
-                setShowSignUpForm(false);
-              }}
-            />
-          </DialogContent>
-        </Dialog>
-      )}
     </>
   );
 };
