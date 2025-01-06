@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/cafe-store-management/static/css/main.a7837057.css",
+    "main.js": "/cafe-store-management/static/js/main.f8be27da.js",
+    "static/js/453.9d3cd94e.chunk.js": "/cafe-store-management/static/js/453.9d3cd94e.chunk.js",
+    "static/media/map.png": "/cafe-store-management/static/media/map.a012f9d15cc5709b021a.png",
+    "static/media/banner.jpg": "/cafe-store-management/static/media/banner.36c75cad3e30a030339b.jpg",
+    "static/media/cafedaxayphakem.jpg": "/cafe-store-management/static/media/cafedaxayphakem.8c7e549e127819a69bdb.jpg",
+    "static/media/trasua.jpg": "/cafe-store-management/static/media/trasua.90b64b85bbe74fd94e8f.jpg",
+    "static/media/sinhto.jpg": "/cafe-store-management/static/media/sinhto.9a77282cafd634612c29.jpg",
+    "static/media/coffee-cup.jpg": "/cafe-store-management/static/media/coffee-cup.977db0e5b3340bf50772.jpg",
+    "static/media/espresso.jpg": "/cafe-store-management/static/media/espresso.3f743ea8b709feb1fb05.jpg",
+    "static/media/chocolate.jpg": "/cafe-store-management/static/media/chocolate.fe31b1dbb794284c3177.jpg",
+    "static/media/soda.jpg": "/cafe-store-management/static/media/soda.24331d00ad7110dc9b1a.jpg",
+    "static/media/caffedenda.jpg": "/cafe-store-management/static/media/caffedenda.d96a1e5773539617cb32.jpg",
+    "index.html": "/cafe-store-management/index.html",
+    "main.a7837057.css.map": "/cafe-store-management/static/css/main.a7837057.css.map",
+    "main.f8be27da.js.map": "/cafe-store-management/static/js/main.f8be27da.js.map",
+    "453.9d3cd94e.chunk.js.map": "/cafe-store-management/static/js/453.9d3cd94e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7837057.css",
+    "static/js/main.f8be27da.js"
+  ]
+}
