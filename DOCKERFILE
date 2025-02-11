@@ -1,0 +1,17 @@
+# Sử dụng hình ảnh Java chính thức
+FROM openjdk:17-jdk-slim
+
+# Đặt biến môi trường để giảm bộ nhớ tiêu thụ
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
+
+# Đặt thư mục làm việc
+WORKDIR /app
+
+# Sao chép file JAR từ thư mục target
+COPY target/*.jar app.jar
+
+# Mở cổng 8080
+EXPOSE 8080
+
+# Chạy ứng dụng Spring Boot
+CMD ["java", "-jar", "app.jar"]
